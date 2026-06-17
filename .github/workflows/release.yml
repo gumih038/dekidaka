@@ -60,3 +60,36 @@ jobs:
           releaseDraft: false
           prerelease: false
           args: ${{ matrix.args }}
+
+  # 両OSのビルド完了後、自動アップデート用 latest.json を生成して Release に添付
+  updater-manifest:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: latest.json を生成してアップロード
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -e
+          ver="${TAG#v}"
+          mkdir sigs && cd sigs
+          gh release download "$TAG" --repo "$REPO" --pattern '*.sig' -D .
+          win_url=$(gh release view "$TAG" --repo "$REPO" --json assets -q '.assets[] | select(.name|endswith("x64-setup.exe")) | .url')
+          mac_url=$(gh release view "$TAG" --repo "$REPO" --json assets -q '.assets[] | select(.name|endswith(".app.tar.gz")) | .url')
+          win_sig=$(cat *x64-setup.exe.sig)
+          mac_sig=$(cat *.app.tar.gz.sig)
+          pub=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          VER="$ver" PUB="$pub" WIN_URL="$win_url" WIN_SIG="$win_sig" MAC_URL="$mac_url" MAC_SIG="$mac_sig" python3 - <<'PY'
+          import os, json
+          d={"version":os.environ["VER"],"notes":"自動アップデート対応版です。","pub_date":os.environ["PUB"],
+             "platforms":{
+               "windows-x86_64":{"signature":os.environ["WIN_SIG"],"url":os.environ["WIN_URL"]},
+               "darwin-aarch64":{"signature":os.environ["MAC_SIG"],"url":os.environ["MAC_URL"]},
+               "darwin-x86_64":{"signature":os.environ["MAC_SIG"],"url":os.environ["MAC_URL"]}}}
+          open("latest.json","w").write(json.dumps(d,ensure_ascii=False,indent=2))
+          PY
+          gh release upload "$TAG" latest.json --repo "$REPO" --clobber
