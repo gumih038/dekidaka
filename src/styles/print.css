@@ -209,6 +209,124 @@
   height: 48px;
 }
 
+/* --- 日報（全件名まとめ）--- */
+.day-print .print-title {
+  font-size: 18px;
+}
+.day-job {
+  border: 1.5px solid #111;
+  margin-bottom: 6px;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.day-job-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 8px;
+  background: #e8e8e8;
+  border-bottom: 1px solid #111;
+}
+.day-job-no {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+}
+.day-job-site {
+  font-weight: 800;
+  font-size: 13px;
+}
+.day-job-meta {
+  font-size: 10px;
+  color: #333;
+  flex: 1;
+}
+.day-job-profit {
+  font-weight: 800;
+  font-size: 12px;
+}
+.day-job-profit.is-loss {
+  color: #b00;
+}
+.day-job-body {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+}
+.day-job-table {
+  flex: 1;
+  margin: 0;
+  border: none;
+}
+.day-job-table th,
+.day-job-table td {
+  border: 1px solid #999;
+  padding: 1px 5px;
+  font-size: 10px;
+}
+.day-job-table thead th {
+  background: #f3f3f3;
+}
+.day-job-cost {
+  width: 200px;
+  border-collapse: collapse;
+  border-left: 1.5px solid #111;
+}
+.day-job-cost th,
+.day-job-cost td {
+  border: 1px solid #999;
+  padding: 1px 6px;
+  font-size: 10px;
+  text-align: left;
+}
+.day-job-cost .c-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.day-job-cost-total th,
+.day-job-cost-total td {
+  background: #f3f3f3;
+  font-weight: 800;
+}
+.day-grand {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4px;
+}
+.day-grand th,
+.day-grand td {
+  border: 1.5px solid #111;
+  padding: 5px 8px;
+  font-size: 12px;
+}
+.day-grand th {
+  background: #e8e8e8;
+  text-align: center;
+  white-space: nowrap;
+}
+.day-grand .c-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.day-grand-profit-th {
+  background: #111 !important;
+  color: #fff;
+}
+.day-grand-profit {
+  background: #111;
+  color: #fff;
+  font-size: 14px !important;
+  font-weight: 800;
+}
+
 /* 画面プレビュー時の枠 */
 .print-preview {
   background: #5b6472;

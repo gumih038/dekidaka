@@ -21,7 +21,7 @@ export function SheetsPage() {
   const remove = useDataStore((s) => s.remove)
   const audit = useDataStore((s) => s.audit)
   const openSheet = useUiStore((s) => s.openSheet)
-  const openPrint = useUiStore((s) => s.openPrint)
+  const openDayPrint = useUiStore((s) => s.openDayPrint)
   const notify = useUiStore((s) => s.notify)
   const user = useAuthStore((s) => s.currentUser)
 
@@ -152,7 +152,7 @@ export function SheetsPage() {
                     <td className="right">
                       <div className="row sheets-actions">
                         <button className="btn btn-ghost btn-sm" onClick={() => openSheet(s.id)} aria-label="編集" title="編集"><Icon name="edit" size={15} /></button>
-                        <button className="btn btn-ghost btn-sm" onClick={() => openPrint(s.id)} aria-label="印刷" title="印刷"><Icon name="print" size={15} /></button>
+                        <button className="btn btn-ghost btn-sm" onClick={() => openDayPrint(s.date, s.companyId)} aria-label="印刷" title="この日を1枚にまとめて印刷"><Icon name="print" size={15} /></button>
                         <button className="btn btn-ghost btn-sm" onClick={() => duplicate(s)} aria-label="複製" title="複製"><Icon name="copy" size={15} /></button>
                         {s.status === 'submitted' && can(user, 'approveSheets') && (
                           <button className="btn btn-ghost btn-sm" onClick={() => setStatusOf(s, 'approved', '承認しました')} title="承認"><Icon name="check" size={15} /></button>

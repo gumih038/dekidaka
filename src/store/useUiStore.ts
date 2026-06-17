@@ -18,18 +18,24 @@ export interface Toast {
   type: 'success' | 'error' | 'info'
 }
 
+/** 印刷対象の1日（日付＋会社） */
+export interface PrintDay {
+  date: string
+  companyId: string
+}
+
 interface UiState {
   route: Route
   /** entry 画面で編集中のシートID（新規時は null） */
   editingSheetId: string | null
-  /** reports 画面で印刷対象のシートID */
-  printSheetId: string | null
+  /** reports 画面で印刷対象の日（日付＋会社） */
+  printDay: PrintDay | null
   toasts: Toast[]
 
   setRoute: (route: Route) => void
   openSheet: (id: string) => void
   newSheet: () => void
-  openPrint: (id: string) => void
+  openDayPrint: (date: string, companyId: string) => void
   notify: (message: string, type?: Toast['type']) => void
   dismiss: (id: string) => void
 }
@@ -37,13 +43,13 @@ interface UiState {
 export const useUiStore = create<UiState>((set) => ({
   route: 'home',
   editingSheetId: null,
-  printSheetId: null,
+  printDay: null,
   toasts: [],
 
   setRoute: (route) => set({ route }),
   openSheet: (id) => set({ route: 'entry', editingSheetId: id }),
   newSheet: () => set({ route: 'entry', editingSheetId: null }),
-  openPrint: (id) => set({ route: 'reports', printSheetId: id }),
+  openDayPrint: (date, companyId) => set({ route: 'reports', printDay: { date, companyId } }),
 
   notify: (message, type = 'success') => {
     const toast: Toast = { id: uid(), message, type }

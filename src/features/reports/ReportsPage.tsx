@@ -10,32 +10,63 @@ import {
 import { formatDate, formatPercent, formatYearMonth, formatYen } from '../../lib/format'
 import { exportCsv } from '../../lib/excel'
 import { Icon } from '../../components/Icon'
-import { SheetPrint } from '../print/SheetPrint'
+import { DayPrint } from '../print/DayPrint'
 import '../../styles/print.css'
 import './reports.css'
 
 type Tab = 'sheet' | 'monthly' | 'company' | 'project'
 
 const TABS: { key: Tab; label: string }[] = [
-  { key: 'sheet', label: '出来高報告書（印刷）' },
+  { key: 'sheet', label: '日報（1枚にまとめて印刷）' },
   { key: 'monthly', label: '月次集計' },
   { key: 'company', label: '会社別集計' },
   { key: 'project', label: '工事別損益' },
 ]
 
+const dayKey = (date: string, companyId: string) => `${date}__${companyId}`
+
+interface DayOption {
+  key: string
+  date: string
+  companyId: string
+  label: string
+}
+
 export function ReportsPage() {
   const data = useAppData()
-  const printSheetId = useUiStore((s) => s.printSheetId)
+  const printDay = useUiStore((s) => s.printDay)
   const notify = useUiStore((s) => s.notify)
-  const [tab, setTab] = useState<Tab>(printSheetId ? 'sheet' : 'monthly')
+  const [tab, setTab] = useState<Tab>(printDay ? 'sheet' : 'monthly')
   const companyName = nameResolver(data.companies)
 
-  const sortedSheets = useMemo(
-    () => [...data.sheets].sort((a, b) => b.date.localeCompare(a.date)),
-    [data.sheets],
+  // 日付＋会社の単位で「日報」候補を作る
+  const days = useMemo<DayOption[]>(() => {
+    const map = new Map<string, DayOption & { count: number }>()
+    for (const s of data.sheets) {
+      const k = dayKey(s.date, s.companyId)
+      const existing = map.get(k)
+      if (existing) existing.count += 1
+      else
+        map.set(k, {
+          key: k,
+          date: s.date,
+          companyId: s.companyId,
+          label: '',
+          count: 1,
+        })
+    }
+    return Array.from(map.values())
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .map((d) => ({
+        ...d,
+        label: `${formatDate(d.date)} ／ ${companyName(d.companyId)} ／ ${d.count}件名`,
+      }))
+  }, [data.sheets, companyName])
+
+  const [selectedKey, setSelectedKey] = useState(
+    printDay ? dayKey(printDay.date, printDay.companyId) : days[0]?.key ?? '',
   )
-  const [selectedId, setSelectedId] = useState(printSheetId ?? sortedSheets[0]?.id ?? '')
-  const selected = data.sheets.find((s) => s.id === selectedId)
+  const selectedDay = days.find((d) => d.key === selectedKey) ?? days[0]
 
   function printNow() {
     document.body.classList.add('printing')
@@ -64,27 +95,25 @@ export function ReportsPage() {
         <section className="card">
           <header className="card-head no-print">
             <div className="field reports-select">
-              <label>印刷する出来高表</label>
-              <select className="select" value={selectedId} onChange={(e) => setSelectedId(e.target.value)}>
-                {sortedSheets.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {formatDate(s.date)} ／ {companyName(s.companyId)} ／ {s.siteName || '現場未設定'}
-                  </option>
+              <label>印刷する日（その日の全件名を1枚にまとめます）</label>
+              <select className="select" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value)}>
+                {days.map((d) => (
+                  <option key={d.key} value={d.key}>{d.label}</option>
                 ))}
               </select>
             </div>
-            <button className="btn btn-primary btn-lg" onClick={printNow} disabled={!selected}>
+            <button className="btn btn-primary btn-lg" onClick={printNow} disabled={!selectedDay}>
               <Icon name="print" size={18} /> 印刷する / PDFで保存
             </button>
           </header>
           <div className="card-body">
             <p className="muted no-print reports-hint">
-              「印刷する」を押すと印刷画面が開きます。紙に印刷する場合はプリンターを、PDFで保存したい場合は
+              選んだ日の全件名（現場）が1枚にまとまって印刷されます。PDFで保存したい場合は、
               送信先（プリンター）から「Microsoft Print to PDF」や「PDF」を選んでください。
             </p>
-            {selected ? (
+            {selectedDay ? (
               <div className="print-preview print-area">
-                <SheetPrint sheet={selected} />
+                <DayPrint date={selectedDay.date} companyId={selectedDay.companyId} />
               </div>
             ) : (
               <p className="empty">出来高表がありません</p>

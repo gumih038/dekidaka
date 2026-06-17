@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from 'react'
 import { useAuthStore } from '../../store/useAuthStore'
+import { isRemote } from '../../db/supabase'
 import './login.css'
 
 export function LoginScreen() {
@@ -57,10 +58,14 @@ export function LoginScreen() {
           </button>
         </form>
         <p className="login-hint">
-          初期アカウント：<code>admin</code> / パスワード <code>admin</code>
+          {isRemote()
+            ? '管理者から発行されたログインIDとパスワードでログインしてください。'
+            : '初期アカウント：admin / パスワード admin'}
         </p>
       </div>
-      <footer className="login-foot">社内利用専用 ・ データはこのPC内に保存されます</footer>
+      <footer className="login-foot">
+        社内利用専用 ・ データは{isRemote() ? 'サーバーに保存・共有されます' : 'このPC内に保存されます'}
+      </footer>
     </div>
   )
 }
