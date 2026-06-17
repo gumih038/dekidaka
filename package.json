@@ -1,7 +1,7 @@
 {
   "name": "dekidaka",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.2.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -22,9 +22,11 @@
     "recharts": "^3.8.1",
     "zustand": "^5.0.14"
   },
+  "optionalDependencies": {
+    "@rolldown/binding-darwin-arm64": "^1.0.3"
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@rolldown/binding-darwin-arm64": "^1.0.3",
     "@tauri-apps/cli": "^2.11.2",
     "@types/node": "^24.12.3",
     "@types/react": "^19.2.14",
