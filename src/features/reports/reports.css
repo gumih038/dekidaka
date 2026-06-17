@@ -1,5 +1,33 @@
+.reports-head {
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: flex-end;
+}
 .reports-select {
-  min-width: 420px;
+  min-width: 360px;
+}
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  height: 42px;
+}
+.seg-btn {
+  border: none;
+  background: var(--c-surface);
+  color: var(--c-text-2);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  padding: 0 var(--space-4);
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.seg-btn + .seg-btn {
+  border-left: 1px solid var(--c-border-strong);
+}
+.seg-btn.active {
+  background: var(--c-accent);
+  color: #fff;
 }
 .reports-hint {
   margin: 0 0 var(--space-4);

@@ -11,6 +11,7 @@ import { formatDate, formatPercent, formatYearMonth, formatYen } from '../../lib
 import { exportCsv } from '../../lib/excel'
 import { Icon } from '../../components/Icon'
 import { DayPrint } from '../print/DayPrint'
+import { ProjectPrint } from '../print/ProjectPrint'
 import '../../styles/print.css'
 import './reports.css'
 
@@ -32,12 +33,26 @@ interface DayOption {
   label: string
 }
 
+type PrintMode = 'day' | 'project'
+
 export function ReportsPage() {
   const data = useAppData()
   const printDay = useUiStore((s) => s.printDay)
+  const openSheet = useUiStore((s) => s.openSheet)
   const notify = useUiStore((s) => s.notify)
   const [tab, setTab] = useState<Tab>(printDay ? 'sheet' : 'monthly')
+  const [printMode, setPrintMode] = useState<PrintMode>('day')
   const companyName = nameResolver(data.companies)
+
+  // 出来高が登録されている工事だけを印刷候補にする
+  const printableProjects = useMemo(() => {
+    const ids = new Set(data.sheets.map((s) => s.projectId).filter(Boolean) as string[])
+    return data.projects
+      .filter((p) => ids.has(p.id))
+      .sort((a, b) => b.code.localeCompare(a.code))
+  }, [data.projects, data.sheets])
+  const [selectedProjectId, setSelectedProjectId] = useState(printableProjects[0]?.id ?? '')
+  const selectedProject = printableProjects.find((p) => p.id === selectedProjectId) ?? printableProjects[0]
 
   // 日付＋会社の単位で「日報」候補を作る
   const days = useMemo<DayOption[]>(() => {
@@ -68,6 +83,13 @@ export function ReportsPage() {
   )
   const selectedDay = days.find((d) => d.key === selectedKey) ?? days[0]
 
+  function editDay(day: DayOption) {
+    const first = data.sheets
+      .filter((s) => s.date === day.date && s.companyId === day.companyId)
+      .sort((a, b) => a.createdAt.localeCompare(b.createdAt))[0]
+    if (first) openSheet(first.id)
+  }
+
   function printNow() {
     document.body.classList.add('printing')
     const cleanup = () => {
@@ -93,30 +115,67 @@ export function ReportsPage() {
 
       {tab === 'sheet' && (
         <section className="card">
-          <header className="card-head no-print">
-            <div className="field reports-select">
-              <label>印刷する日（その日の全件名を1枚にまとめます）</label>
-              <select className="select" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value)}>
-                {days.map((d) => (
-                  <option key={d.key} value={d.key}>{d.label}</option>
-                ))}
-              </select>
+          <header className="card-head no-print reports-head">
+            <div className="seg">
+              <button className={`seg-btn ${printMode === 'day' ? 'active' : ''}`} onClick={() => setPrintMode('day')}>日ごと</button>
+              <button className={`seg-btn ${printMode === 'project' ? 'active' : ''}`} onClick={() => setPrintMode('project')}>工事ごと</button>
             </div>
-            <button className="btn btn-primary btn-lg" onClick={printNow} disabled={!selectedDay}>
+
+            {printMode === 'day' ? (
+              <div className="field reports-select">
+                <label>印刷する日（その日の全件名を1枚にまとめます）</label>
+                <select className="select" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value)}>
+                  {days.map((d) => (
+                    <option key={d.key} value={d.key}>{d.label}</option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              <div className="field reports-select">
+                <label>印刷する工事（その工事の全出来高を1枚にまとめます）</label>
+                <select className="select" value={selectedProjectId} onChange={(e) => setSelectedProjectId(e.target.value)}>
+                  {printableProjects.map((p) => (
+                    <option key={p.id} value={p.id}>{p.code} {p.name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            <div className="spacer" />
+            {printMode === 'day' && selectedDay && (
+              <button className="btn" onClick={() => editDay(selectedDay)}>
+                <Icon name="edit" size={16} /> この日を編集
+              </button>
+            )}
+            <button
+              className="btn btn-primary btn-lg"
+              onClick={printNow}
+              disabled={printMode === 'day' ? !selectedDay : !selectedProject}
+            >
               <Icon name="print" size={18} /> 印刷する / PDFで保存
             </button>
           </header>
           <div className="card-body">
             <p className="muted no-print reports-hint">
-              選んだ日の全件名（現場）が1枚にまとまって印刷されます。PDFで保存したい場合は、
-              送信先（プリンター）から「Microsoft Print to PDF」や「PDF」を選んでください。
+              {printMode === 'day'
+                ? '選んだ日の全件名（現場）が1枚にまとまって印刷されます。'
+                : '選んだ工事の全出来高（日付ごと）が1枚にまとまって印刷されます。'}
+              PDFで保存したい場合は、送信先（プリンター）から「Microsoft Print to PDF」や「PDF」を選んでください。
             </p>
-            {selectedDay ? (
+            {printMode === 'day' ? (
+              selectedDay ? (
+                <div className="print-preview print-area">
+                  <DayPrint date={selectedDay.date} companyId={selectedDay.companyId} />
+                </div>
+              ) : (
+                <p className="empty">出来高表がありません</p>
+              )
+            ) : selectedProject ? (
               <div className="print-preview print-area">
-                <DayPrint date={selectedDay.date} companyId={selectedDay.companyId} />
+                <ProjectPrint projectId={selectedProject.id} />
               </div>
             ) : (
-              <p className="empty">出来高表がありません</p>
+              <p className="empty">出来高が登録された工事がありません</p>
             )}
           </div>
         </section>
