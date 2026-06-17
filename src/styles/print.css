@@ -1,9 +1,8 @@
-/* Excel風 出来高報告書（A4横） */
+/* Excel風 出来高報告書（A4縦） */
 .print-sheet {
-  width: 277mm;
-  min-height: 190mm;
+  width: 194mm; /* A4縦 210mm - 左右マージン16mm */
   margin: 0 auto;
-  padding: 8mm 10mm;
+  padding: 6mm 8mm;
   background: #fff;
   color: #111;
   font-size: 11px;
@@ -209,90 +208,95 @@
   height: 48px;
 }
 
-/* --- 日報（全件名まとめ）--- */
+/* --- 日報（全件名まとめ・A4縦コンパクト）--- */
 .day-print .print-title {
-  font-size: 18px;
+  font-size: 16px;
 }
 .day-job {
-  border: 1.5px solid #111;
-  margin-bottom: 6px;
+  border: 1.2px solid #111;
+  margin-bottom: 4px;
   break-inside: avoid;
   page-break-inside: avoid;
 }
 .day-job-head {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 3px 8px;
+  gap: 6px;
+  padding: 2px 6px;
   background: #e8e8e8;
   border-bottom: 1px solid #111;
 }
 .day-job-no {
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
   flex-shrink: 0;
   display: grid;
   place-items: center;
   border-radius: 999px;
   background: #111;
   color: #fff;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
 }
 .day-job-site {
   font-weight: 800;
-  font-size: 13px;
+  font-size: 11px;
 }
 .day-job-meta {
-  font-size: 10px;
+  font-size: 9px;
   color: #333;
   flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .day-job-profit {
   font-weight: 800;
-  font-size: 12px;
+  font-size: 11px;
 }
 .day-job-profit.is-loss {
   color: #b00;
 }
 .day-job-body {
-  display: flex;
-  gap: 0;
-  align-items: stretch;
+  display: block;
 }
 .day-job-table {
-  flex: 1;
+  width: 100%;
   margin: 0;
   border: none;
 }
 .day-job-table th,
 .day-job-table td {
   border: 1px solid #999;
-  padding: 1px 5px;
-  font-size: 10px;
+  padding: 0 4px;
+  font-size: 9.5px;
+  line-height: 1.5;
 }
 .day-job-table thead th {
   background: #f3f3f3;
 }
-.day-job-cost {
-  width: 200px;
-  border-collapse: collapse;
-  border-left: 1.5px solid #111;
+/* 原価を1行に圧縮表示 */
+.day-job-costline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 10px;
+  padding: 2px 6px;
+  border-top: 1px solid #111;
+  background: #fafafa;
+  font-size: 9.5px;
 }
-.day-job-cost th,
-.day-job-cost td {
-  border: 1px solid #999;
-  padding: 1px 6px;
-  font-size: 10px;
-  text-align: left;
+.day-job-costline span {
+  white-space: nowrap;
 }
-.day-job-cost .c-num {
-  text-align: right;
+.day-job-costline .ci-num {
   font-variant-numeric: tabular-nums;
+  font-weight: 700;
 }
-.day-job-cost-total th,
-.day-job-cost-total td {
-  background: #f3f3f3;
+.day-job-costline .ci-cost {
+  font-weight: 800;
+}
+.day-job-costline .ci-rev {
+  margin-left: auto;
   font-weight: 800;
 }
 .day-grand {
@@ -340,7 +344,7 @@
 
 @media print {
   @page {
-    size: A4 landscape;
+    size: A4 portrait;
     margin: 8mm;
   }
   html,
@@ -369,7 +373,13 @@
     box-shadow: none;
     margin: 0;
     padding: 0;
-    page-break-after: avoid;
+  }
+  /* 件名ブロック・合計は途中で切らない（入らなければ次ページへ） */
+  .day-job,
+  .day-grand,
+  .print-foot {
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
   /* アプリのUI部品は印刷しない */
   .no-print,

@@ -198,7 +198,7 @@ export function EntryPage() {
                 openDayPrint(date, companyId)
               }}
             >
-              <Icon name="print" size={15} /> 保存して印刷（1枚にまとめて）
+              <Icon name="print" size={15} /> 保存して印刷画面へ
             </button>
             <button className="btn btn-ghost summary-save" onClick={() => setRoute('sheets')}>一覧へ戻る</button>
           </div>

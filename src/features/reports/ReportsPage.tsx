@@ -91,16 +91,8 @@ export function ReportsPage() {
   }
 
   function printNow() {
-    document.body.classList.add('printing')
-    const cleanup = () => {
-      document.body.classList.remove('printing')
-      window.removeEventListener('afterprint', cleanup)
-    }
-    window.addEventListener('afterprint', cleanup)
-    // レンダリング反映後に印刷ダイアログを開く
-    setTimeout(() => window.print(), 60)
-    // afterprint が来ない環境向けの保険
-    setTimeout(cleanup, 4000)
+    // クリックのユーザー操作中に同期で呼ぶ（遅延すると一部WebViewで無視されるため）
+    window.print()
   }
 
   return (

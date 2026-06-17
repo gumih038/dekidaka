@@ -135,15 +135,14 @@ function DayJobBlock({ job, index, projectName, teamName }: DayJobBlockProps) {
             </tr>
           </tfoot>
         </table>
-        <table className="day-job-cost">
-          <tbody>
-            <tr><th>人件費（{job.headcount}人）</th><td className="c-num">{formatYen(t.laborCost)}</td></tr>
-            <tr><th>高速代</th><td className="c-num">{formatYen(t.tollCost)}</td></tr>
-            <tr><th>燃料代</th><td className="c-num">{formatYen(t.fuelCost)}</td></tr>
-            <tr><th>車両費（{job.vehicles.length}台）</th><td className="c-num">{formatYen(t.vehicleCost)}</td></tr>
-            <tr className="day-job-cost-total"><th>原価計</th><td className="c-num">{formatYen(t.costTotal)}</td></tr>
-          </tbody>
-        </table>
+        <div className="day-job-costline">
+          <span>人件費(<span className="ci-num">{job.headcount}</span>人) <span className="ci-num">{formatYen(t.laborCost)}</span></span>
+          <span>高速 <span className="ci-num">{formatYen(t.tollCost)}</span></span>
+          <span>燃料 <span className="ci-num">{formatYen(t.fuelCost)}</span></span>
+          <span>車両({job.vehicles.length}) <span className="ci-num">{formatYen(t.vehicleCost)}</span></span>
+          <span className="ci-cost">原価計 <span className="ci-num">{formatYen(t.costTotal)}</span></span>
+          <span className="ci-rev">出来高 {formatYen(t.revenue)}</span>
+        </div>
       </div>
     </div>
   )
