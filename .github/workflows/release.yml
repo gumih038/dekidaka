@@ -49,10 +49,14 @@ jobs:
           # Supabase 接続情報をビルドに埋め込む（GitHub の Secrets に登録しておく）
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          # 自動アップデート用の署名鍵
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           tagName: ${{ github.ref_name }}
           releaseName: '出来高表 ${{ github.ref_name }}'
-          releaseBody: '自動生成されたインストーラです。'
-          releaseDraft: true
+          releaseBody: '自動アップデート対応のインストーラです。'
+          # 自動更新の latest.json が /releases/latest/download/ で取得できるよう、ドラフトにしない
+          releaseDraft: false
           prerelease: false
           args: ${{ matrix.args }}

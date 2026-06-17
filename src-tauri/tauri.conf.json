@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "出来高表",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "identifier": "jp.dekidaka.app",
   "build": {
     "frontendDist": "../dist",
@@ -28,6 +28,7 @@
   },
   "bundle": {
     "active": true,
+    "createUpdaterArtifacts": true,
     "targets": [
       "nsis",
       "app",
@@ -42,6 +43,14 @@
     ],
     "android": {
       "debugApplicationIdSuffix": ".debug"
+    }
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": [
+        "https://github.com/gumih038/dekidaka/releases/latest/download/latest.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEM4RENDRjg0MTUwMzNFRUQKUldUdFBnTVZoTS9jeUQ4MDlsM3QxNVhnZHJ3SVVOMi91enNYNldVVHVNVDREY0VBcHVtT1RBblcK"
     }
   }
 }
