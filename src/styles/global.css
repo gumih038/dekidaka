@@ -1,0 +1,325 @@
+/* グローバルスタイル + 共通コンポーネント */
+@import './tokens.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--c-text);
+  background: var(--c-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: var(--text-sm);
+}
+
+/* 数字は等幅・桁揃え */
+.num {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+.profit {
+  color: var(--c-profit);
+}
+.loss {
+  color: var(--c-loss);
+}
+
+/* --- ボタン --------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 42px;
+  padding: 0 var(--space-5);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--c-surface);
+  color: var(--c-text);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+.btn:hover {
+  background: var(--c-surface-3);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--c-accent-ring);
+}
+.btn-primary {
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  color: var(--c-text-inv);
+}
+.btn-primary:hover {
+  background: var(--c-accent-hover);
+}
+.btn-danger {
+  border-color: var(--c-loss);
+  color: var(--c-loss);
+  background: var(--c-surface);
+}
+.btn-danger:hover {
+  background: var(--c-loss-soft);
+}
+.btn-ghost {
+  border-color: transparent;
+  background: transparent;
+}
+.btn-ghost:hover {
+  background: var(--c-surface-3);
+}
+.btn-sm {
+  height: 34px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-xs);
+}
+.btn-lg {
+  height: 54px;
+  padding: 0 var(--space-6);
+  font-size: var(--text-md);
+  border-radius: var(--radius);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- フォーム ------------------------------------------------------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.field > label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--c-text-2);
+}
+.input,
+.select,
+.textarea {
+  height: 42px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--c-surface);
+  color: var(--c-text);
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  width: 100%;
+}
+.textarea {
+  height: auto;
+  padding: var(--space-2) var(--space-3);
+  resize: vertical;
+  min-height: 64px;
+}
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--c-accent);
+  box-shadow: 0 0 0 3px var(--c-accent-ring);
+}
+.input.num {
+  text-align: right;
+}
+
+/* --- カード --------------------------------------------------------- */
+.card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--c-border);
+}
+.card-head h3 {
+  font-size: var(--text-md);
+}
+.card-body {
+  padding: var(--space-5);
+}
+
+/* --- テーブル ------------------------------------------------------- */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+.table th {
+  position: sticky;
+  top: 0;
+  background: var(--c-surface-3);
+  color: var(--c-text-2);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-align: left;
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--c-border-strong);
+  white-space: nowrap;
+  z-index: 1;
+}
+.table th.right,
+.table td.right {
+  text-align: right;
+}
+.table td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--c-border);
+  color: var(--c-text);
+}
+.table tbody tr {
+  transition: background var(--dur) var(--ease);
+}
+.table tbody tr:hover {
+  background: var(--c-accent-soft);
+}
+.table tfoot td {
+  padding: var(--space-3);
+  font-weight: 700;
+  background: var(--c-surface-2);
+  border-top: 2px solid var(--c-border-strong);
+}
+.table .clickable {
+  cursor: pointer;
+}
+
+/* --- バッジ --------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 22px;
+  padding: 0 var(--space-2);
+  border-radius: 999px;
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.badge-draft {
+  background: var(--c-surface-3);
+  color: var(--c-draft);
+}
+.badge-submitted {
+  background: var(--c-warn-soft);
+  color: var(--c-submitted);
+}
+.badge-approved {
+  background: var(--c-profit-soft);
+  color: var(--c-approved);
+}
+.badge-closed {
+  background: #e6e9f0;
+  color: var(--c-closed);
+}
+
+/* --- ユーティリティ ------------------------------------------------- */
+.row {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.spacer {
+  flex: 1;
+}
+.muted {
+  color: var(--c-text-3);
+}
+.grid {
+  display: grid;
+  gap: var(--space-4);
+}
+.empty {
+  padding: var(--space-10);
+  text-align: center;
+  color: var(--c-text-3);
+}
+
+/* スクロールバー（控えめ） */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--c-border-strong);
+  border-radius: 999px;
+  border: 2px solid var(--c-bg);
+}
+
+/* 起動スプラッシュ */
+.splash {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  background: var(--c-nav);
+  color: var(--c-nav-text);
+}
+.splash .brand-mark {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--c-accent), #3f86f0);
+  color: #fff;
+  font-weight: 800;
+  font-size: 26px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

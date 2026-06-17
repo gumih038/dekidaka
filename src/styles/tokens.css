@@ -1,0 +1,86 @@
+/* デザイントークン — プロ向け業務基幹ツールのトーン */
+:root {
+  /* ニュートラル（スレート系） */
+  --c-bg: #eef1f6;
+  --c-surface: #ffffff;
+  --c-surface-2: #f7f9fc;
+  --c-surface-3: #eef2f8;
+  --c-border: #d8dee9;
+  --c-border-strong: #b9c2d4;
+
+  /* サイドバー（濃色） */
+  --c-nav: #0f1b2d;
+  --c-nav-2: #16263d;
+  --c-nav-border: #243650;
+  --c-nav-text: #c5d2e6;
+  --c-nav-text-dim: #7f93b3;
+  --c-nav-active: #1d3c63;
+
+  /* テキスト */
+  --c-text: #15233b;
+  --c-text-2: #46566f;
+  --c-text-3: #76859c;
+  --c-text-inv: #ffffff;
+
+  /* アクセント（信頼感のあるブルー） */
+  --c-accent: #1763d6;
+  --c-accent-hover: #1457bd;
+  --c-accent-soft: #e3edfd;
+  --c-accent-ring: rgba(23, 99, 214, 0.28);
+
+  /* セマンティック */
+  --c-profit: #0f8a4f; /* 黒字 */
+  --c-profit-soft: #e2f5ea;
+  --c-loss: #d13b3b; /* 赤字 */
+  --c-loss-soft: #fce5e5;
+  --c-warn: #c77800;
+  --c-warn-soft: #fdf0d8;
+  --c-info: #1763d6;
+
+  /* 状態バッジ */
+  --c-draft: #76859c;
+  --c-submitted: #c77800;
+  --c-approved: #0f8a4f;
+  --c-closed: #46566f;
+
+  /* タイポグラフィ */
+  --font-sans: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui,
+    -apple-system, "Segoe UI", sans-serif;
+  --font-num: "SF Mono", "Roboto Mono", "Consolas", ui-monospace, monospace;
+
+  --text-2xs: 12px;
+  --text-xs: 13px;
+  --text-sm: 14px;
+  --text-base: 15px;
+  --text-md: 17px;
+  --text-lg: 20px;
+  --text-xl: 24px;
+  --text-2xl: 30px;
+  --text-3xl: 40px;
+
+  /* スペーシング */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* 角丸・影 */
+  --radius-sm: 5px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --shadow-sm: 0 1px 2px rgba(15, 27, 45, 0.06), 0 1px 3px rgba(15, 27, 45, 0.08);
+  --shadow: 0 2px 6px rgba(15, 27, 45, 0.08), 0 6px 16px rgba(15, 27, 45, 0.08);
+  --shadow-lg: 0 10px 30px rgba(15, 27, 45, 0.16);
+
+  /* モーション */
+  --dur: 140ms;
+  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+
+  --sidebar-w: 264px;
+  --topbar-h: 64px;
+}

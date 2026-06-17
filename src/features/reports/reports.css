@@ -1,0 +1,19 @@
+.reports-select {
+  min-width: 420px;
+}
+.reports-hint {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--c-accent-soft);
+  border-radius: var(--radius);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+@media print {
+  .sidebar,
+  .topbar,
+  .tabs,
+  .card-head.no-print {
+    display: none !important;
+  }
+}

@@ -1,0 +1,264 @@
+/* Excel風 出来高報告書（A4横） */
+.print-sheet {
+  width: 277mm;
+  min-height: 190mm;
+  margin: 0 auto;
+  padding: 8mm 10mm;
+  background: #fff;
+  color: #111;
+  font-size: 11px;
+  box-sizing: border-box;
+}
+
+.print-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.print-company {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.print-logo {
+  height: 52px;
+  max-width: 160px;
+  object-fit: contain;
+}
+.print-company-name {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0;
+}
+.print-company-sub {
+  margin: 1px 0 0;
+  font-size: 10px;
+  color: #333;
+}
+.print-title-block {
+  text-align: right;
+}
+.print-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin: 0 0 6px;
+}
+.print-meta {
+  border-collapse: collapse;
+  margin-left: auto;
+  font-size: 11px;
+}
+.print-meta th,
+.print-meta td {
+  border: 1px solid #111;
+  padding: 2px 8px;
+}
+.print-meta th {
+  background: #eee;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.print-siterow {
+  display: flex;
+  border: 1px solid #111;
+  margin-bottom: 6px;
+}
+.print-site-label {
+  background: #eee;
+  padding: 3px 10px;
+  border-right: 1px solid #111;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.print-site-value {
+  padding: 3px 10px;
+  flex: 1;
+}
+
+.print-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 8px;
+}
+.print-table th,
+.print-table td {
+  border: 1px solid #111;
+  padding: 3px 6px;
+}
+.print-table thead th {
+  background: #e8e8e8;
+  text-align: center;
+  font-weight: 700;
+}
+.print-table .c-no {
+  width: 32px;
+  text-align: center;
+}
+.print-table .c-cat {
+  width: 56px;
+  text-align: center;
+}
+.print-table .c-num {
+  width: 96px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.print-table .c-qty {
+  width: 72px;
+  text-align: right;
+}
+.print-pad td {
+  height: 20px;
+}
+.print-total-label {
+  text-align: right;
+  font-weight: 700;
+  background: #f3f3f3;
+}
+.print-total {
+  font-weight: 800;
+  background: #f3f3f3;
+}
+
+.print-bottom {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.print-cost,
+.print-summary {
+  border-collapse: collapse;
+}
+.print-cost {
+  flex: 1;
+}
+.print-summary {
+  width: 230px;
+}
+.print-cost th,
+.print-cost td,
+.print-summary th,
+.print-summary td {
+  border: 1px solid #111;
+  padding: 3px 8px;
+}
+.print-cost thead th {
+  background: #e8e8e8;
+  text-align: center;
+}
+.print-cost th {
+  text-align: left;
+  font-weight: 600;
+}
+.print-cost .c-num,
+.print-summary .c-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  width: 110px;
+}
+.print-cost-total th,
+.print-cost-total td {
+  background: #f3f3f3;
+  font-weight: 800;
+}
+.print-summary th {
+  background: #eee;
+  text-align: left;
+}
+.print-profit th,
+.print-profit td {
+  background: #111;
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.print-note {
+  margin: 6px 0 0;
+  font-size: 10px;
+}
+
+.print-foot {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.print-footer-text {
+  font-size: 10px;
+  margin: 0;
+}
+.print-stamps {
+  border-collapse: collapse;
+}
+.print-stamps th,
+.print-stamps td {
+  border: 1px solid #111;
+}
+.print-stamps th {
+  background: #eee;
+  padding: 2px 8px;
+  font-size: 10px;
+}
+.stamp-cell {
+  width: 56px;
+  height: 48px;
+}
+
+/* 画面プレビュー時の枠 */
+.print-preview {
+  background: #5b6472;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  overflow: auto;
+}
+.print-preview .print-sheet {
+  box-shadow: var(--shadow-lg);
+}
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+  .print-area {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+  }
+  .print-preview {
+    background: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  .print-sheet {
+    width: 100%;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    page-break-after: avoid;
+  }
+  /* アプリのUI部品は印刷しない */
+  .no-print,
+  .toaster,
+  .sidebar,
+  .topbar,
+  .tabs {
+    display: none !important;
+  }
+}
